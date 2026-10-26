@@ -1,6 +1,6 @@
 ## Working starter application
 
-This app runs locally using Apache, Node.js, and MySQL.
+This app runs locally using Apache, Node.js, and MySQL (as of right now).
 
 ### Changes made
 
@@ -10,9 +10,9 @@ This app runs locally using Apache, Node.js, and MySQL.
 
 ### steps to run locally
 
-Requires XAMPP and Node.js/npm.
+This will require XAMPP and Node.js/npm.
 
-1. Place the repository folder inside XAMPP’s `htdocs` folder.
+1. Place repository folder inside XAMPP’s `htdocs` folder.
 2. Start Apache and MySQL in XAMPP (wait until they turn green).
 3. Create the `web_app` database and sample `names` table using the SQL in phpmyadmin.
 4. Copy `project1/Backend/dotenv` to `project1/Backend/.env` and enter your local database settings. **Make sure the `.env` file must be inside `Backend`!** Each teammate needs their own local database and `.env`; `.env` is excluded from Git.
