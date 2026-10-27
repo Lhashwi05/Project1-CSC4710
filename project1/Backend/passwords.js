@@ -1,4 +1,4 @@
-const { randomBytes, scrypt } = require('node:crypto');
+const { randomBytes, scrypt, timingSafeEqual } = require('node:crypto');
 const { promisify } = require('node:util');
 
 const scryptAsync = promisify(scrypt);
@@ -18,4 +18,32 @@ async function hashPassword(password) {
     return `scrypt$32768$8$3$${salt}$${key.toString('hex')}`;
 }
 
-module.exports = { hashPassword };
+async function verifyPassword(password, storedHash) {
+    if (typeof password !== 'string' ||
+        typeof storedHash !== 'string') {
+        return false;
+    }
+
+    const parts = storedHash.split('$');
+
+    // Check that the stored value matches our password-hash format.
+    if (parts.length !== 6 ||
+        parts.slice(0, 4).join('$') !== 'scrypt$32768$8$3') {
+        return false;
+    }
+
+    const salt = parts[4];
+    const savedKey = parts[5];
+
+    if (!/^[a-f0-9]{32}$/.test(salt) ||
+        !/^[a-f0-9]{128}$/.test(savedKey)) {
+        return false;
+    }
+
+    // Reuse the original salt with the password being checked.
+    const key = await scryptAsync(password, salt, 64, options);
+
+    return timingSafeEqual(key, Buffer.from(savedKey, 'hex'));
+}
+
+module.exports = { hashPassword, verifyPassword };

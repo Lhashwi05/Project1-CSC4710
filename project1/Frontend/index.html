@@ -62,6 +62,40 @@
     <!-- index.js displays registration success or error messages here. -->
     <p id="register-message" role="status"></p>
 
+    <hr>
+
+<section>
+    <h2>Sign in</h2>
+
+    <form id="login-form"
+          action="http://localhost:5050/login"
+          method="post">
+
+        <p>
+            <label>Username:
+                <input name="username"
+                       maxlength="50"
+                       autocomplete="username"
+                       required>
+            </label>
+        </p>
+
+        <p>
+            <label>Password:
+                <input name="password"
+                       type="password"
+                       maxlength="128"
+                       autocomplete="current-password"
+                       required>
+            </label>
+        </p>
+
+        <button type="submit">Sign in</button>
+    </form>
+
+    <!-- JavaScript displays sign-in feedback here. -->
+    <p id="login-message" role="status"></p>
+</section>
 </main>
 <!-- defer runs the script after the HTML is parsed so it can find the form. -->
 <script src="index.js" defer></script></body>

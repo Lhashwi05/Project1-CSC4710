@@ -10,7 +10,6 @@ let instance = null;
 // if you use .env to configure
 console.log("HOST: " + process.env.HOST);
 console.log("DB USER: " + process.env.DB_USER);
-console.log("PASSWORD: " + process.env.PASSWORD);
 console.log("DATABASE: " + process.env.DATABASE);
 console.log("DB PORT: " + process.env.DB_PORT);
 
@@ -88,7 +87,8 @@ class DbService{
    the function to pause until the query is completed.
    */
 
-   async registerUser(user, passwordHash) {
+   async registerUser(user, passwordHash) 
+   {
     const query = `
         INSERT INTO Users
         (username, password, firstname, lastname,
@@ -115,9 +115,84 @@ class DbService{
             resolve({ username: user.username });
         });
     });
+   }
+
+   async findUserByUsername(username) {
+    const query = `
+        SELECT username, password, firstname, lastname
+        FROM Users
+        WHERE username = ?
+    `;
+
+    return new Promise((resolve, reject) => {
+        connection.query(query, [username], (error, results) => {
+            if (error) {
+                reject(error);
+                return;
+            }
+
+            // Return the account, or null if the username doesn't exist.
+            resolve(results[0] || null);
+        });
+    });
 }
 
+async recordSignIn(username) {
+    const query = `
+        UPDATE Users
+        SET signintime = NOW()
+        WHERE username = ?
+    `;
 
+    return new Promise((resolve, reject) => {
+        connection.query(query, [username], (error) => {
+            if (error) {
+                reject(error);
+                return;
+            }
+
+            resolve();
+        });
+    });
+}
+
+async findUserByUsername(username) {
+    const query = `
+        SELECT username, password, firstname, lastname
+        FROM Users
+        WHERE username = ?
+    `;
+
+    return new Promise((resolve, reject) => {
+        connection.query(query, [username], (error, results) => {
+            if (error) {
+                reject(error);
+                return;
+            }
+
+            resolve(results[0] || null);
+        });
+    });
+}
+
+async recordSignIn(username) {
+    const query = `
+        UPDATE Users
+        SET signintime = NOW()
+        WHERE username = ?
+    `;
+
+    return new Promise((resolve, reject) => {
+        connection.query(query, [username], (error) => {
+            if (error) {
+                reject(error);
+                return;
+            }
+
+            resolve();
+        });
+    });
+}
     async getAllData(){
         try{
            // use await to call an asynchronous function
