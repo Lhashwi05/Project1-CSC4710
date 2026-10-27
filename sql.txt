@@ -1,4 +1,7 @@
-CREATE TABLE Users (
+CSC4710 Project 1: SQL for assignment features 1–3.
+Select the web_app database before running the table-creation statement.
+
+CREATE TABLE IF NOT EXISTS Users (
     username VARCHAR(50) PRIMARY KEY,
     password VARCHAR(255) NOT NULL,
     firstname VARCHAR(50) NOT NULL,
@@ -8,3 +11,66 @@ CREATE TABLE Users (
     registerday DATE NOT NULL,
     signintime DATETIME DEFAULT NULL
 ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+/*
+below are the query templates used by the backend.
+nodde supplies the values for each ? placeholder.
+
+1. REGISTER A USER
+The password value is a salted scrypt hash.
+
+INSERT INTO Users
+    (username, password, firstname, lastname,
+     salary, age, registerday, signintime)
+VALUES (?, ?, ?, ?, ?, ?, CURDATE(), NULL);
+
+
+2. FIND AN ACCOUNT FOR SIGN-IN
+Node verifies the submitted password against the returned hash
+
+SELECT username, password, firstname, lastname
+FROM Users
+WHERE username = ?;
+
+
+RECORD A SUCCESSFUL SIGN-IN
+this runs only after password verification succeeds.
+
+UPDATE Users
+SET signintime = NOW()
+WHERE username = ?;
+
+
+3. SEARCH BY FIRST NAME
+
+SELECT username, firstname, lastname,
+       salary, age, registerday, signintime
+FROM Users
+WHERE firstname LIKE ? ESCAPE '!'
+ORDER BY lastname, firstname, username;
+
+
+SEARCH BY LAST NAME
+
+SELECT username, firstname, lastname,
+       salary, age, registerday, signintime
+FROM Users
+WHERE lastname LIKE ? ESCAPE '!'
+ORDER BY lastname, firstname, username;
+
+
+SEARCH BY BOTH NAMES
+Both conditions must match.
+
+SELECT username, firstname, lastname,
+       salary, age, registerday, signintime
+FROM Users
+WHERE firstname LIKE ? ESCAPE '!'
+  AND lastname LIKE ? ESCAPE '!'
+ORDER BY lastname, firstname, username;
+
+
+Search parameters contain surrounding % characters for partial matching
+For example, Alex becomes %Alex%.
+Literal %, _, and ! characters are escaped by the backend using !.
+*/

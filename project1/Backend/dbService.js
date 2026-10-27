@@ -193,6 +193,49 @@ async recordSignIn(username) {
         });
     });
 }
+
+async searchUsersByName(firstname, lastname) {
+    const filters = [];
+    const values = [];
+
+    // Match part of a name, while treating %, _, and ! literally.
+    const pattern = name =>
+        `%${name.replace(/[!%_]/g, '!$&')}%`;
+
+    if (firstname) {
+        filters.push("firstname LIKE ? ESCAPE '!'");
+        values.push(pattern(firstname));
+    }
+
+    if (lastname) {
+        filters.push("lastname LIKE ? ESCAPE '!'");
+        values.push(pattern(lastname));
+    }
+
+    if (filters.length === 0) {
+        return [];
+    }
+
+    // These are fixed SQL fragments; user input stays in values.
+    const query = `
+        SELECT username, firstname, lastname,
+               salary, age, registerday, signintime
+        FROM Users
+        WHERE ${filters.join(' AND ')}
+        ORDER BY lastname, firstname, username
+    `;
+
+    return new Promise((resolve, reject) => {
+        connection.query(query, values, (error, results) => {
+            if (error) {
+                reject(error);
+                return;
+            }
+
+            resolve(results);
+        });
+    });
+}
     async getAllData(){
         try{
            // use await to call an asynchronous function

@@ -120,17 +120,8 @@ app.post('/login', async (request, response) => {
 
     try {
         const db = dbService.getDbServiceInstance();
-
-        // TEMPORARY: identify the files and methods the server actually loaded.
-        console.log('LOGIN DEBUG app:', __filename);
-        console.log('LOGIN DEBUG database:', require.resolve('./dbService'));
-        console.log(
-            'LOGIN DEBUG methods:',
-            Object.getOwnPropertyNames(Object.getPrototypeOf(db))
-        );
-
         const user = await db.findUserByUsername(username.trim());
-
+        
         // Use the same message for an unknown username or incorrect password.
         if (!user || !(await verifyPassword(password, user.password))) {
             return response.status(401).json({
@@ -167,10 +158,50 @@ app.post('/login', async (request, response) => {
             user: request.session.user
         });
     } catch (error) {
-        console.error('Sign-in failed:', error.code || error.message);
+        console.error('Sign-in failed:', error.stack);
 
         return response.status(500).json({
             error: 'Sign-in failed. Check the backend terminal.'
+        });
+    }
+});
+
+app.get('/users/search', async (request, response) => {
+    // Only signed-in users can search the directory.
+    if (!request.session.user) {
+        return response.status(401).json({
+            error: 'Sign in before searching users.'
+        });
+    }
+
+    const { firstname = '', lastname = '' } = request.query;
+
+    if (typeof firstname !== 'string' ||
+        typeof lastname !== 'string') {
+        return response.status(400).json({
+            error: 'First and last names must be text.'
+        });
+    }
+
+    const first = firstname.trim();
+    const last = lastname.trim();
+
+    if ((!first && !last) || first.length > 50 || last.length > 50) {
+        return response.status(400).json({
+            error: 'Enter a first name, last name, or both, using up to 50 characters each.'
+        });
+    }
+
+    try {
+        const db = dbService.getDbServiceInstance();
+        const results = await db.searchUsersByName(first, last);
+
+        return response.json({ data: results });
+    } catch (error) {
+        console.error('Search failed:', error.code || error.message);
+
+        return response.status(500).json({
+            error: 'Search failed. Check the backend terminal.'
         });
     }
 });
