@@ -3,39 +3,66 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="stylesheet.css">
   <title>DB Project 1 new</title>
 </head>
 <body>
   <main>
-      <label>Name:</label>
-      <input type="text" id="name-input">
-      <button id="add-name-btn">Add Name</button>
- 
-     <br><br><br>
-     <div> 
-        <input placeholder="search by name" id="search-input">
-        <button id="search-btn">Search</button>
-     </div>
+    
+      <section>
+    <h2>Create an account</h2>
+    <!-- registration input names match the fields expected by POST /register. -->
+    <form id="register-form"
+          action="http://localhost:5050/register"
+          method="post">
 
+        <p>
+            <label>Username:
+                <input name="username" maxlength="50"
+                       autocomplete="username" required>
+            </label>
+        </p>
 
-     <table id="table">
-         <thead>
-             <th>Id</th>
-             <th>Name</th>
-             <th>Date Added</th>
-             <th>Delete</th>
-             <th>Edit</th>  
-         </thead>
-         <tbody></tbody>
-     </table>
+        <p>
+            <label>Password:
+                <input name="password" type="password"
+                       minlength="8" maxlength="128"
+                       autocomplete="new-password" required>
+            </label>
+        </p>
 
-     <section hidden id="update-row">
-         <label>Name:</label>
-         <input type="text" id="update-name-input">
-         <button id="update-row-btn" value="">Update</button>
-    </section>
+        <p>
+            <label>First name:
+                <input name="firstname" maxlength="50" required>
+            </label>
+        </p>
+
+        <p>
+            <label>Last name:
+                <input name="lastname" maxlength="50" required>
+            </label>
+        </p>
+
+        <p>
+            <label>Salary:
+                <input name="salary" type="number"
+                       min="0" max="9999999999.99"
+                       step="0.01" required>
+            </label>
+        </p>
+
+        <p>
+            <label>Age:
+                <input name="age" type="number"
+                       min="0" max="130" step="1" required>
+            </label>
+        </p>
+
+        <button type="submit">Register</button>
+    </form>
+    <!-- index.js displays registration success or error messages here. -->
+    <p id="register-message" role="status"></p>
+
 </main>
-<script src="index.js"></script>
-</body>
+<!-- defer runs the script after the HTML is parsed so it can find the form. -->
+<script src="index.js" defer></script></body>
 </html>

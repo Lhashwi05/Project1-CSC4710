@@ -87,6 +87,37 @@ class DbService{
    to work with the asynchronous nature of the connection.query method, allowing 
    the function to pause until the query is completed.
    */
+
+   async registerUser(user, passwordHash) {
+    const query = `
+        INSERT INTO Users
+        (username, password, firstname, lastname,
+         salary, age, registerday, signintime)
+        VALUES (?, ?, ?, ?, ?, ?, CURDATE(), NULL)
+    `;
+
+    const values = [
+        user.username,
+        passwordHash,
+        user.firstname,
+        user.lastname,
+        user.salary,
+        user.age
+    ];
+
+    return new Promise((resolve, reject) => {
+        connection.query(query, values, (error) => {
+            if (error) {
+                reject(error);
+                return;
+            }
+
+            resolve({ username: user.username });
+        });
+    });
+}
+
+
     async getAllData(){
         try{
            // use await to call an asynchronous function
