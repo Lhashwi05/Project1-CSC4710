@@ -136,122 +136,58 @@
         <tbody id="search-results-body"></tbody>
     </table>
 </section>
-
-
-
-
-<!--#4 Search by USERID (Username)-->
+<!--8-users who never signed in -->
 <hr>
 
 <section>
-    <h2>Search by Username</h2>
+    <h2>Users Who Never Signed In</h2>
+    <p>Lists every user whose sign-in time is empty.</p>
 
-    <form id="username-search-form">
+    <button type="button" id="never-signed-in-button">
+        Find Users Who Never Signed In
+    </button>
 
+    <p id="never-signed-in-message" role="status"></p>
+    <div id="never-signed-in-results"></div>
+</section>
+
+<!--9-users who registered on the same day as John -->
+<hr>
+
+<section>
+    <h2>Registered Same Day As User</h2>
+
+    <form id="same-day-form">
         <p>
             <label>Username:
-                <input name="username"
-                       id="username-search"
-                       maxlength="50">
+                <input id="same-day-username" maxlength="50">
             </label>
         </p>
 
         <button type="submit">
-            Search Username
+            Registered Same Day
         </button>
     </form>
 
-<p id="username-search-message" role="status"></p>
-<div id="username-search-results"></div>
+    <p id="same-day-message" role="status"></p>
+    <div id="same-day-results"></div>
 </section>
 
-<!--#5 Search by Salary Range-->
+<!--10-users who registered today-->
 <hr>
 
 <section>
-    <h2>Salary Range Search</h2>
+    <h2>Registered Today</h2>
 
-    <form id="salary-search-form">
+    <button type="button" id="registered-today-button">
+        Find Users Registered Today
+    </button>
 
-        <p>
-            <label>Minimum Salary:
-                <input type="number"
-                       id="min-salary"
-                       step="0.01">
-            </label>
-        </p>
-
-        <p>
-            <label>Maximum Salary:
-                <input type="number"
-                       id="max-salary"
-                       step="0.01">
-            </label>
-        </p>
-
-        <button type="submit">
-            Search Salary Range
-        </button>
-
-    </form>
-<p id="salary-search-message" role="status"></p>
-<div id="salary-search-results"></div>
+    <p id="registered-today-message" role="status"></p>
+    <div id="registered-today-results"></div>
 </section>
 
-<!--#6 Search by Age Range-->
-<hr>
 
-<section>
-    <h2>Age Range Search</h2>
-
-    <form id="age-search-form">
-
-        <p>
-            <label>Minimum Age:
-                <input type="number"
-                       id="min-age">
-            </label>
-        </p>
-
-        <p>
-            <label>Maximum Age:
-                <input type="number"
-                       id="max-age">
-            </label>
-        </p>
-
-        <button type="submit">
-            Search Age Range
-        </button>
-
-    </form>
-<p id="age-search-message" role="status"></p>
-<div id="age-search-results"></div>
-</section>
-
-<!--#7 Registered after specific user-->
-<hr>
-
-<section>
-    <h2>Registered After User</h2>
-
-    <form id="after-user-form">
-
-        <p>
-            <label>Username:
-                <input id="after-username"
-                       maxlength="50">
-            </label>
-        </p>
-
-        <button type="submit">
-            Registered After User
-        </button>
-
-    </form>
-<p id="after-user-message" role="status"></p>
-<div id="after-user-results"></div>
-</section>
 
 
 
