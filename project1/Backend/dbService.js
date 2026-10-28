@@ -156,8 +156,48 @@ async recordSignIn(username) {
     });
 }
 
+<<<<<<< HEAD
 
 
+=======
+async findUserByUsername(username) {
+    const query = `
+        SELECT username, password, firstname, lastname
+        FROM Users
+        WHERE username = ?
+    `;
+
+    return new Promise((resolve, reject) => {
+        connection.query(query, [username], (error, results) => {
+            if (error) {
+                reject(error);
+                return;
+            }
+
+            resolve(results[0] || null);
+        });
+    });
+}
+
+async recordSignIn(username) {
+    const query = `
+        UPDATE Users
+        SET signintime = NOW()
+        WHERE username = ?
+    `;
+
+    return new Promise((resolve, reject) => {
+        connection.query(query, [username], (error) => {
+            if (error) {
+                reject(error);
+                return;
+            }
+
+            resolve();
+        });
+    });
+}
+>>>>>>> user-features
 
 async searchUsersByName(firstname, lastname) {
     const filters = [];
@@ -201,6 +241,7 @@ async searchUsersByName(firstname, lastname) {
         });
     });
 }
+<<<<<<< HEAD
 
 /// start of 4-7
 async searchUserByUsername(username) {
@@ -305,6 +346,8 @@ async searchUsersRegisteredAfter(registerday) {
 
 
 
+=======
+>>>>>>> user-features
     async getAllData(){
         try{
            // use await to call an asynchronous function

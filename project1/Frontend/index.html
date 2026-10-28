@@ -14,6 +14,7 @@
     <form id="register-form"
           action="http://localhost:5050/register"
           method="post">
+<<<<<<< HEAD
 
         <p>
             <label>Username:
@@ -253,10 +254,139 @@
 <div id="after-user-results"></div>
 </section>
 
+=======
+>>>>>>> user-features
 
+        <p>
+            <label>Username:
+                <input name="username" maxlength="50"
+                       autocomplete="username" required>
+            </label>
+        </p>
 
+<<<<<<< HEAD
+=======
+        <p>
+            <label>Password:
+                <input name="password" type="password"
+                       minlength="8" maxlength="128"
+                       autocomplete="new-password" required>
+            </label>
+        </p>
+
+        <p>
+            <label>First name:
+                <input name="firstname" maxlength="50" required>
+            </label>
+        </p>
+
+        <p>
+            <label>Last name:
+                <input name="lastname" maxlength="50" required>
+            </label>
+        </p>
+
+        <p>
+            <label>Salary:
+                <input name="salary" type="number"
+                       min="0" max="9999999999.99"
+                       step="0.01" required>
+            </label>
+        </p>
+
+        <p>
+            <label>Age:
+                <input name="age" type="number"
+                       min="0" max="130" step="1" required>
+            </label>
+        </p>
+
+        <button type="submit">Register</button>
+    </form>
+    <!-- index.js displays registration success or error messages here. -->
+    <p id="register-message" role="status"></p>
+
+    <hr>
+
+<section>
+    <h2>Sign in</h2>
+
+    <form id="login-form"
+          action="http://localhost:5050/login"
+          method="post">
+
+        <p>
+            <label>Username:
+                <input name="username"
+                       maxlength="50"
+                       autocomplete="username"
+                       required>
+            </label>
+        </p>
+
+        <p>
+            <label>Password:
+                <input name="password"
+                       type="password"
+                       maxlength="128"
+                       autocomplete="current-password"
+                       required>
+            </label>
+        </p>
+
+        <button type="submit">Sign in</button>
+    </form>
+
+    <!-- JavaScript displays sign-in feedback here. -->
+    <p id="login-message" role="status"></p>
+</section>
+
+<hr>
+
+<section>
+    <h2>Search users</h2>
+    <p>Sign in, then enter a first name, last name, or both.</p>
+
+    <form id="search-form"
+          action="http://localhost:5050/users/search"
+          method="get">
+
+        <p>
+            <label>First name:
+                <input name="firstname" maxlength="50">
+            </label>
+        </p>
+
+        <p>
+            <label>Last name:
+                <input name="lastname" maxlength="50">
+            </label>
+        </p>
+
+        <button type="submit">Search</button>
+    </form>
+
+    <p id="search-message" role="status"></p>
+
+    <!-- Matching users are added to the table by index.js. -->
+    <table id="search-results" hidden>
+        <thead>
+            <tr>
+                <th scope="col">Username</th>
+                <th scope="col">First name</th>
+                <th scope="col">Last name</th>
+            </tr>
+        </thead>
+        <tbody id="search-results-body"></tbody>
+    </table>
+</section>
+>>>>>>> user-features
 
 </main>
 <!-- defer runs the script after the HTML is parsed so it can find the form. -->
 <script src="index.js" defer></script></body>
+<<<<<<< HEAD
 </html>
+=======
+</html>
+>>>>>>> user-features
