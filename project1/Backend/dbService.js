@@ -10,7 +10,6 @@ let instance = null;
 // if you use .env to configure
 console.log("HOST: " + process.env.HOST);
 console.log("DB USER: " + process.env.DB_USER);
-console.log("PASSWORD: " + process.env.PASSWORD);
 console.log("DATABASE: " + process.env.DATABASE);
 console.log("DB PORT: " + process.env.DB_PORT);
 
@@ -87,6 +86,225 @@ class DbService{
    to work with the asynchronous nature of the connection.query method, allowing 
    the function to pause until the query is completed.
    */
+
+   async registerUser(user, passwordHash) 
+   {
+    const query = `
+        INSERT INTO Users
+        (username, password, firstname, lastname,
+         salary, age, registerday, signintime)
+        VALUES (?, ?, ?, ?, ?, ?, CURDATE(), NULL)
+    `;
+
+    const values = [
+        user.username,
+        passwordHash,
+        user.firstname,
+        user.lastname,
+        user.salary,
+        user.age
+    ];
+
+    return new Promise((resolve, reject) => {
+        connection.query(query, values, (error) => {
+            if (error) {
+                reject(error);
+                return;
+            }
+
+            resolve({ username: user.username });
+        });
+    });
+   }
+
+   async findUserByUsername(username) {
+    const query = `
+        SELECT username, password, firstname, lastname
+        FROM Users
+        WHERE username = ?
+    `;
+
+    return new Promise((resolve, reject) => {
+        connection.query(query, [username], (error, results) => {
+            if (error) {
+                reject(error);
+                return;
+            }
+
+            // Return the account, or null if the username doesn't exist.
+            resolve(results[0] || null);
+        });
+    });
+}
+
+async recordSignIn(username) {
+    const query = `
+        UPDATE Users
+        SET signintime = NOW()
+        WHERE username = ?
+    `;
+
+    return new Promise((resolve, reject) => {
+        connection.query(query, [username], (error) => {
+            if (error) {
+                reject(error);
+                return;
+            }
+
+            resolve();
+        });
+    });
+}
+
+
+
+
+async searchUsersByName(firstname, lastname) {
+    const filters = [];
+    const values = [];
+
+    // Match part of a name, while treating %, _, and ! literally.
+    const pattern = name =>
+        `%${name.replace(/[!%_]/g, '!$&')}%`;
+
+    if (firstname) {
+        filters.push("firstname LIKE ? ESCAPE '!'");
+        values.push(pattern(firstname));
+    }
+
+    if (lastname) {
+        filters.push("lastname LIKE ? ESCAPE '!'");
+        values.push(pattern(lastname));
+    }
+
+    if (filters.length === 0) {
+        return [];
+    }
+
+    // These are fixed SQL fragments; user input stays in values.
+    const query = `
+        SELECT username, firstname, lastname,
+               salary, age, registerday, signintime
+        FROM Users
+        WHERE ${filters.join(' AND ')}
+        ORDER BY lastname, firstname, username
+    `;
+
+    return new Promise((resolve, reject) => {
+        connection.query(query, values, (error, results) => {
+            if (error) {
+                reject(error);
+                return;
+            }
+
+            resolve(results);
+        });
+    });
+}
+
+/// start of 4-7
+async searchUserByUsername(username) {
+    const query = `
+        SELECT username, firstname, lastname,
+               salary, age, registerday, signintime
+        FROM Users
+        WHERE username = ?
+    `;
+
+    return new Promise((resolve, reject) => {
+        connection.query(query, [username], (error, results) => {
+            if (error) return reject(error);
+            resolve(results);
+        });
+    });
+}
+
+async searchUsersBySalary(minSalary, maxSalary) {
+    const query = `
+        SELECT username, firstname, lastname,
+               salary, age, registerday, signintime
+        FROM Users
+        WHERE salary BETWEEN ? AND ?
+        ORDER BY salary, username
+    `;
+
+    return new Promise((resolve, reject) => {
+        connection.query(
+            query,
+            [minSalary, maxSalary],
+            (error, results) => {
+                if (error) return reject(error);
+                resolve(results);
+            }
+        );
+    });
+}
+
+async searchUsersByAge(minAge, maxAge) {
+    const query = `
+        SELECT username, firstname, lastname,
+               salary, age, registerday, signintime
+        FROM Users
+        WHERE age BETWEEN ? AND ?
+        ORDER BY age, username
+    `;
+
+    return new Promise((resolve, reject) => {
+        connection.query(
+            query,
+            [minAge, maxAge],
+            (error, results) => {
+                if (error) return reject(error);
+                resolve(results);
+            }
+        );
+    });
+}
+
+async getRegistrationDay(username) {
+    const query = `
+        SELECT registerday
+        FROM Users
+        WHERE username = ?
+    `;
+
+    return new Promise((resolve, reject) => {
+        connection.query(query, [username], (error, results) => {
+            if (error) return reject(error);
+
+            resolve(results[0] ? results[0].registerday : null);
+        });
+    });
+}
+
+async searchUsersRegisteredAfter(registerday) {
+    const query = `
+        SELECT username, firstname, lastname,
+               salary, age, registerday, signintime
+        FROM Users
+        WHERE registerday > ?
+        ORDER BY registerday, username
+    `;
+
+    return new Promise((resolve, reject) => {
+        connection.query(query, [registerday], (error, results) => {
+            if (error) return reject(error);
+            resolve(results);
+        });
+    });
+}
+/// end of 4-7
+
+
+
+
+
+
+
+
+
+
+
     async getAllData(){
         try{
            // use await to call an asynchronous function
