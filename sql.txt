@@ -74,3 +74,38 @@ Search parameters contain surrounding % characters for partial matching
 For example, Alex becomes %Alex%.
 Literal %, _, and ! characters are escaped by the backend using !.
 */
+
+
+
+/* #4 SEARCH BY USERID (aka username)*/
+
+SELECT username, firstname, lastname,
+               salary, age, registerday, signintime
+        FROM Users
+        WHERE username = ?;
+
+/* #5 SEARCH USERS WITH SALARY BETWEEN X AND Y*/
+SELECT username, firstname, lastname,
+               salary, age, registerday, signintime
+        FROM Users
+        WHERE salary BETWEEN ? AND ?
+        ORDER BY salary, username;
+
+/* #6 SEARCH USERS WITH AGE BETWEEN X AND Y*/
+SELECT username, firstname, lastname,
+               salary, age, registerday, signintime
+        FROM Users
+        WHERE age BETWEEN ? AND ?
+        ORDER BY age, username;
+
+
+
+/* #7 USERS REGISTERED AFTER SPECIFIC USER */
+SELECT username, firstname, lastname,
+               salary, age, registerday, signintime
+        FROM Users
+        WHERE registerday > ?
+        ORDER BY registerday, username;
+
+
+
