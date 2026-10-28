@@ -341,6 +341,68 @@ app.get('/users/registered-after', async (request, response) => {
 ///end of 4-7
 
 
+//Feature 8: users who never signed in
+app.get('/users/never-signed-in', async (request, response) => {
+    try {
+        const db = dbService.getDbServiceInstance();
+        const data = await db.searchUsersNeverSignedIn();
+        return response.json({ data });
+    } catch (error) {
+        console.error('Never-signed-in search failed:', error.code || error.message);
+        return response.status(500).json({
+            error: 'Never-signed-in search failed.'
+        });
+    }
+});
+
+//feature 9: users who registered on the same day as John
+app.get('/users/registered-same-day', async (request, response) => {
+    const username = request.query.username;
+
+    if (typeof username !== 'string' ||
+        !username.trim() ||
+        username.trim().length > 50) {
+        return response.status(400).json({
+            error: 'Enter a reference username of 1–50 characters.'
+        });
+    }
+
+    try {
+        const db = dbService.getDbServiceInstance();
+
+        // Confirm the reference user exists before running the query.
+        const referenceDay = await db.getRegistrationDay(username.trim());
+
+        if (referenceDay === null) {
+            return response.status(404).json({
+                error: 'The reference username was not found.'
+            });
+        }
+
+        const data = await db.searchUsersRegisteredSameDay(username.trim());
+        return response.json({ data });
+    } catch (error) {
+        console.error('Same-day search failed:', error.code || error.message);
+        return response.status(500).json({
+            error: 'Same-day registration search failed.'
+        });
+    }
+});
+
+// Feature 10: users regsitered today
+app.get('/users/registered-today', async (request, response) => {
+    try {
+        const db = dbService.getDbServiceInstance();
+        const data = await db.searchUsersRegisteredToday();
+        return response.json({ data });
+    } catch (error) {
+        console.error('Registered-today search failed:', error.code || error.message);
+        return response.status(500).json({
+            error: 'Registered-today search failed.'
+        });
+    }
+});
+
 
 
 
