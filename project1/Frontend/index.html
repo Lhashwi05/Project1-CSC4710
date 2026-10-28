@@ -3,39 +3,260 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="stylesheet.css">
   <title>DB Project 1 new</title>
 </head>
 <body>
   <main>
-      <label>Name:</label>
-      <input type="text" id="name-input">
-      <button id="add-name-btn">Add Name</button>
- 
-     <br><br><br>
-     <div> 
-        <input placeholder="search by name" id="search-input">
-        <button id="search-btn">Search</button>
-     </div>
+    
+      <section>
+    <h2>Create an account</h2>
+    <!-- registration input names match the fields expected by POST /register. -->
+    <form id="register-form"
+          action="http://localhost:5050/register"
+          method="post">
+
+        <p>
+            <label>Username:
+                <input name="username" maxlength="50"
+                       autocomplete="username" required>
+            </label>
+        </p>
+
+        <p>
+            <label>Password:
+                <input name="password" type="password"
+                       minlength="8" maxlength="128"
+                       autocomplete="new-password" required>
+            </label>
+        </p>
+
+        <p>
+            <label>First name:
+                <input name="firstname" maxlength="50" required>
+            </label>
+        </p>
+
+        <p>
+            <label>Last name:
+                <input name="lastname" maxlength="50" required>
+            </label>
+        </p>
+
+        <p>
+            <label>Salary:
+                <input name="salary" type="number"
+                       min="0" max="9999999999.99"
+                       step="0.01" required>
+            </label>
+        </p>
+
+        <p>
+            <label>Age:
+                <input name="age" type="number"
+                       min="0" max="130" step="1" required>
+            </label>
+        </p>
+
+        <button type="submit">Register</button>
+    </form>
+    <!-- index.js displays registration success or error messages here. -->
+    <p id="register-message" role="status"></p>
+
+    <hr>
+
+<section>
+    <h2>Sign in</h2>
+
+    <form id="login-form"
+          action="http://localhost:5050/login"
+          method="post">
+
+        <p>
+            <label>Username:
+                <input name="username"
+                       maxlength="50"
+                       autocomplete="username"
+                       required>
+            </label>
+        </p>
+
+        <p>
+            <label>Password:
+                <input name="password"
+                       type="password"
+                       maxlength="128"
+                       autocomplete="current-password"
+                       required>
+            </label>
+        </p>
+
+        <button type="submit">Sign in</button>
+    </form>
+
+    <!-- JavaScript displays sign-in feedback here. -->
+    <p id="login-message" role="status"></p>
+</section>
+
+<hr>
+
+<section>
+    <h2>Search users</h2>
+    <p>Sign in, then enter a first name, last name, or both.</p>
+
+    <form id="search-form"
+          action="http://localhost:5050/users/search"
+          method="get">
+
+        <p>
+            <label>First name:
+                <input name="firstname" maxlength="50">
+            </label>
+        </p>
+
+        <p>
+            <label>Last name:
+                <input name="lastname" maxlength="50">
+            </label>
+        </p>
+
+        <button type="submit">Search</button>
+    </form>
+
+    <p id="search-message" role="status"></p>
+
+    <!-- Matching users are added to the table by index.js. -->
+    <table id="search-results" hidden>
+        <thead>
+            <tr>
+                <th scope="col">Username</th>
+                <th scope="col">First name</th>
+                <th scope="col">Last name</th>
+            </tr>
+        </thead>
+        <tbody id="search-results-body"></tbody>
+    </table>
+</section>
 
 
-     <table id="table">
-         <thead>
-             <th>Id</th>
-             <th>Name</th>
-             <th>Date Added</th>
-             <th>Delete</th>
-             <th>Edit</th>  
-         </thead>
-         <tbody></tbody>
-     </table>
 
-     <section hidden id="update-row">
-         <label>Name:</label>
-         <input type="text" id="update-name-input">
-         <button id="update-row-btn" value="">Update</button>
-    </section>
+
+<!--#4 Search by USERID (Username)-->
+<hr>
+
+<section>
+    <h2>Search by Username</h2>
+
+    <form id="username-search-form">
+
+        <p>
+            <label>Username:
+                <input name="username"
+                       id="username-search"
+                       maxlength="50">
+            </label>
+        </p>
+
+        <button type="submit">
+            Search Username
+        </button>
+    </form>
+
+<p id="username-search-message" role="status"></p>
+<div id="username-search-results"></div>
+</section>
+
+<!--#5 Search by Salary Range-->
+<hr>
+
+<section>
+    <h2>Salary Range Search</h2>
+
+    <form id="salary-search-form">
+
+        <p>
+            <label>Minimum Salary:
+                <input type="number"
+                       id="min-salary"
+                       step="0.01">
+            </label>
+        </p>
+
+        <p>
+            <label>Maximum Salary:
+                <input type="number"
+                       id="max-salary"
+                       step="0.01">
+            </label>
+        </p>
+
+        <button type="submit">
+            Search Salary Range
+        </button>
+
+    </form>
+<p id="salary-search-message" role="status"></p>
+<div id="salary-search-results"></div>
+</section>
+
+<!--#6 Search by Age Range-->
+<hr>
+
+<section>
+    <h2>Age Range Search</h2>
+
+    <form id="age-search-form">
+
+        <p>
+            <label>Minimum Age:
+                <input type="number"
+                       id="min-age">
+            </label>
+        </p>
+
+        <p>
+            <label>Maximum Age:
+                <input type="number"
+                       id="max-age">
+            </label>
+        </p>
+
+        <button type="submit">
+            Search Age Range
+        </button>
+
+    </form>
+<p id="age-search-message" role="status"></p>
+<div id="age-search-results"></div>
+</section>
+
+<!--#7 Registered after specific user-->
+<hr>
+
+<section>
+    <h2>Registered After User</h2>
+
+    <form id="after-user-form">
+
+        <p>
+            <label>Username:
+                <input id="after-username"
+                       maxlength="50">
+            </label>
+        </p>
+
+        <button type="submit">
+            Registered After User
+        </button>
+
+    </form>
+<p id="after-user-message" role="status"></p>
+<div id="after-user-results"></div>
+</section>
+
+
+
+
 </main>
-<script src="index.js"></script>
-</body>
+<!-- defer runs the script after the HTML is parsed so it can find the form. -->
+<script src="index.js" defer></script></body>
 </html>
