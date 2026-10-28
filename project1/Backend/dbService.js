@@ -156,48 +156,8 @@ async recordSignIn(username) {
     });
 }
 
-<<<<<<< HEAD
 
 
-=======
-async findUserByUsername(username) {
-    const query = `
-        SELECT username, password, firstname, lastname
-        FROM Users
-        WHERE username = ?
-    `;
-
-    return new Promise((resolve, reject) => {
-        connection.query(query, [username], (error, results) => {
-            if (error) {
-                reject(error);
-                return;
-            }
-
-            resolve(results[0] || null);
-        });
-    });
-}
-
-async recordSignIn(username) {
-    const query = `
-        UPDATE Users
-        SET signintime = NOW()
-        WHERE username = ?
-    `;
-
-    return new Promise((resolve, reject) => {
-        connection.query(query, [username], (error) => {
-            if (error) {
-                reject(error);
-                return;
-            }
-
-            resolve();
-        });
-    });
-}
->>>>>>> user-features
 
 async searchUsersByName(firstname, lastname) {
     const filters = [];
@@ -241,7 +201,6 @@ async searchUsersByName(firstname, lastname) {
         });
     });
 }
-<<<<<<< HEAD
 
 /// start of 4-7
 async searchUserByUsername(username) {
@@ -337,17 +296,67 @@ async searchUsersRegisteredAfter(registerday) {
 /// end of 4-7
 
 
+///beginning of 8-10!!!
+
+
+// feauture 8: users who never signed in
+//pick every column, then getrting unknown, then laying out order 
+async searchUsersNeverSignedIn() {
+    const query = ` 
+        SELECT username, firstname, lastname, salary, age, registerday, signintime
+        FROM Users 
+        WHERE signintime IS NULL
+        ORDER BY registerday, username
+    `;
+    //call back, have the errors go and the results show
+    return new Promise((resolve, reject) => { connection.query(query, (error, results) => {
+            if (error) return reject(error);
+            resolve(results);
+        });
+    });
+}
+    //Feature 9: Users who registered on the same day that john did
+
+    async searchUsersRegisteredSameDay(username) { //get the reference //same register day but exlude 1
+    const query = `
+        SELECT username, firstname, lastname,
+               salary, age, registerday, signintime
+        FROM Users
+        WHERE registerday = (
+            SELECT registerday FROM Users WHERE username = ?
+        )
+        AND username <> ?
+        ORDER BY username
+    `;
+    //run query, send error back and the rows
+    return new Promise((resolve, reject) => { connection.query(query, [username, username], (error, results) => {
+            if (error) return reject(error);
+            resolve(results);
+        });
+    });
+}
+    //Feature 10: return the users who registered today
+    async searchUsersRegisteredToday() {
+    const query = `
+        SELECT username, firstname, lastname,
+               salary, age, registerday, signintime
+        FROM Users
+        WHERE registerday = CURDATE() 
+        ORDER BY username
+    `;
+        //same logic
+    return new Promise((resolve, reject) => { connection.query(query, (error, results) => {
+            if (error) return reject(error);
+            resolve(results);
+        });
+    });
+}
 
 
 
 
 
 
-
-
-
-=======
->>>>>>> user-features
     async getAllData(){
         try{
            // use await to call an asynchronous function

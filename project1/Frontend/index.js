@@ -1,9 +1,5 @@
-<<<<<<< HEAD
 
 /// registration UI: send form data to POST /register and display the result.
-=======
-// registration UI: send form data to POST /register and display the result.
->>>>>>> user-features
 // backend validates input, hashes the password, and saves the account.
 
 
@@ -163,7 +159,6 @@ searchForm.addEventListener('submit', async (event) => {
             'Unable to search. Check your backend terminal.';
     } finally {
         button.disabled = false;
-<<<<<<< HEAD
     }
 });
 
@@ -394,7 +389,3 @@ afterUserForm.addEventListener('submit', async event => {
         message, results, button
     );
 });
-=======
-    }
-});
->>>>>>> user-features

@@ -101,7 +101,6 @@ app.post('/register', async (request, response) => {
             error: 'Registration failed. Check the backend terminal.'
         });
     }
-<<<<<<< HEAD
 });
 
 // Verify credentials and create a signed-in session.
@@ -205,15 +204,9 @@ app.get('/users/search', async (request, response) => {
             error: 'Search failed. Check the backend terminal.'
         });
     }
-=======
->>>>>>> user-features
 });
 
-// Verify credentials and create a signed-in session.
-app.post('/login', async (request, response) => {
-    const { username, password } = request.body || {};
 
-<<<<<<< HEAD
 
 
 
@@ -239,96 +232,11 @@ app.get('/users/by-username', async (request, response) => {
         username.trim().length > 50) {
         return response.status(400).json({
             error: 'Enter a username of 1–50 characters.'
-=======
-    if (typeof username !== 'string' ||
-        !username.trim() ||
-        username.trim().length > 50 ||
-        typeof password !== 'string' ||
-        !password ||
-        password.length > 128) {
-        return response.status(400).json({
-            error: 'Enter a valid username and password.'
         });
     }
 
     try {
         const db = dbService.getDbServiceInstance();
-        const user = await db.findUserByUsername(username.trim());
-        
-        // Use the same message for an unknown username or incorrect password.
-        if (!user || !(await verifyPassword(password, user.password))) {
-            return response.status(401).json({
-                error: 'Incorrect username or password.'
-            });
-        }
-
-        // Create a fresh session ID after authentication succeeds.
-        await new Promise((resolve, reject) => {
-            request.session.regenerate(error => {
-                if (error) return reject(error);
-                resolve();
-            });
-        });
-
-        await db.recordSignIn(user.username);
-
-        // Keep the password hash out of the session and browser response.
-        request.session.user = {
-            username: user.username,
-            firstname: user.firstname,
-            lastname: user.lastname
-        };
-
-        await new Promise((resolve, reject) => {
-            request.session.save(error => {
-                if (error) return reject(error);
-                resolve();
-            });
-        });
-
-        return response.json({
-            message: 'Sign-in successful.',
-            user: request.session.user
-        });
-    } catch (error) {
-        console.error('Sign-in failed:', error.stack);
-
-        return response.status(500).json({
-            error: 'Sign-in failed. Check the backend terminal.'
-        });
-    }
-});
-
-app.get('/users/search', async (request, response) => {
-    // Only signed-in users can search the directory.
-    if (!request.session.user) {
-        return response.status(401).json({
-            error: 'Sign in before searching users.'
-        });
-    }
-
-    const { firstname = '', lastname = '' } = request.query;
-
-    if (typeof firstname !== 'string' ||
-        typeof lastname !== 'string') {
-        return response.status(400).json({
-            error: 'First and last names must be text.'
-        });
-    }
-
-    const first = firstname.trim();
-    const last = lastname.trim();
-
-    if ((!first && !last) || first.length > 50 || last.length > 50) {
-        return response.status(400).json({
-            error: 'Enter a first name, last name, or both, using up to 50 characters each.'
->>>>>>> user-features
-        });
-    }
-
-    try {
-        const db = dbService.getDbServiceInstance();
-<<<<<<< HEAD
         const data = await db.searchUserByUsername(username.trim());
 
         return response.json({ data });
@@ -336,21 +244,10 @@ app.get('/users/search', async (request, response) => {
         console.error('Username search failed:', error.code || error.message);
         return response.status(500).json({
             error: 'Username search failed.'
-=======
-        const results = await db.searchUsersByName(first, last);
-
-        return response.json({ data: results });
-    } catch (error) {
-        console.error('Search failed:', error.code || error.message);
-
-        return response.status(500).json({
-            error: 'Search failed. Check the backend terminal.'
->>>>>>> user-features
         });
     }
 });
 
-<<<<<<< HEAD
 // Feature 5: Search by salary range.
 app.get('/users/by-salary', async (request, response) => {
     const { min, max } = request.query;
@@ -447,8 +344,6 @@ app.get('/users/registered-after', async (request, response) => {
 
 
 
-=======
->>>>>>> user-features
 // Existing starter demo: insert a name.
 app.post('/insert', (request, response) => {
     const { name } = request.body;

@@ -107,5 +107,26 @@ SELECT username, firstname, lastname,
         WHERE registerday > ?
         ORDER BY registerday, username;
 
+/*#8 USERS WHO NEVER SIGNED IN*/
+SELECT username, firstname, lastname, salary, age, registerday, signintime
+FROM Users
+WHERE signintime IS NULL
+ORDER BY registerday, username;
 
 
+/*#9 USERS WHO REGISTERED ON SAME DAY AS JOHN*/
+SELECT username, firstname, lastname, salary, age, registerday, signintime
+FROM Users
+WHERE registerday = (
+    SELECT registerday FROM Users WHERE username = 'john'
+)
+AND username <> 'john'
+ORDER BY username;
+SELECT registerday FROM Users WHERE username = 'john';
+
+
+/*#10 Users who registered today*/
+SELECT username, firstname, lastname, salary, age, registerday, signintime
+FROM Users
+WHERE registerday = CURDATE()
+ORDER BY username;
