@@ -160,6 +160,87 @@ searchForm.addEventListener('submit', async (event) => {
         button.disabled = false;
     }
 });
+
+function renderUserResults(container, users) {
+    container.replaceChildren();
+
+    if (users.length === 0) {
+        container.textContent = 'No matching users found.';
+        return;
+    }
+
+    const columns = [
+        ['username', 'Username'],
+        ['firstname', 'First name'],
+        ['lastname', 'Last name'],
+        ['salary', 'Salary'],
+        ['age', 'Age'],
+        ['registerday', 'Registration date'],
+        ['signintime', 'Last sign-in']
+    ];
+
+    const table = document.createElement('table');
+    const thead = document.createElement('thead');
+    const headerRow = document.createElement('tr');
+
+    for (const [, label] of columns) {
+        const th = document.createElement('th');
+        th.scope = 'col';
+        th.textContent = label;
+        headerRow.appendChild(th);
+    }
+
+    thead.appendChild(headerRow);
+    table.appendChild(thead);
+
+    const tbody = document.createElement('tbody');
+
+    for (const user of users) {
+        const row = document.createElement('tr');
+        for (const [key] of columns) {
+            const cell = document.createElement('td');
+            const value = user[key];
+
+            if (value === null || value === undefined) {
+                cell.textContent = 'Never';
+            } else if (key === 'registerday' && typeof value === 'string') {
+                cell.textContent = value.slice(0, 10);
+            } else {
+                cell.textContent = String(value);
+            }
+            row.appendChild(cell);
+        }
+        tbody.appendChild(row);
+    }
+    table.appendChild(tbody);
+    container.appendChild(table);
+}
+
+async function runUserSearch(url, messageElement, resultsElement, button) {
+    button.disabled = true;
+    messageElement.textContent = 'Searching...';
+    resultsElement.replaceChildren();
+
+    try {
+        const response = await fetch(url, {
+            credentials: 'include'
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            messageElement.textContent = result.error || 'Search failed.';
+            return;
+        }
+
+        renderUserResults(resultsElement, result.data);
+        messageElement.textContent = `${result.data.length} matching user(s) found.`;
+    } catch (error) {
+        messageElement.textContent = 'Unable to search. Check your backend and database.';
+    } finally {
+        button.disabled = false;
+    }
+}
 // features 8-10
 //feature 8: users who never signed in, wait for button click, find the element, hen call helper fucn. for fetching
 const neverSignedInButton =
